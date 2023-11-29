@@ -1,23 +1,35 @@
-# project files
 import gather_and_store
-import analyze_and_visualize
+import process_and_visualize
+    
 
 def main():
-  db_filename = 'sports.db'
-     
-  gather_and_store.populate_baseball_table(db_filename, table_name='baseball')
-  gather_and_store.populate_basketball_table(db_filename, table_name='basketball')
-  # gather_and_store.populate_soccer_table(db_filename, table_name='soccer')
-  # gather_and_store.populate_hockey_table(db_filename, table_name='hockey')
+    db_filename = 'sports.db'
+        
+    # Part 2
+    gather_and_store.populate_baseball_table(db_filename)
+    gather_and_store.populate_basketball_table(db_filename)
+    gather_and_store.populate_football_table(db_filename)
+    gather_and_store.populate_soccer_table(db_filename)
+    
+    # Part 3
+    process_and_visualize.calculate_ratios(db_filename, 'baseball')
+    process_and_visualize.calculate_ratios(db_filename, 'basketball')
+    process_and_visualize.calculate_ratios(db_filename, 'football')
+    process_and_visualize.calculate_ratios(db_filename, 'soccer')
 
-  # txt files being weird
+    # Part 4
+    process_and_visualize.visualize('baseball')
+    process_and_visualize.visualize('basketball')
+    process_and_visualize.visualize('football')
+    process_and_visualize.visualize('soccer')
 
-  # also check away teams when getting team list in analyze and visualize
-
-  analyze_and_visualize.calculate_ratios(db_filename, table_name='baseball', txt_filename='baseball.txt')
-  analyze_and_visualize.calculate_ratios(db_filename, table_name='basketball', txt_filename='basketball.txt')
-  # analyze_and_visualize.calculate_ratios(db_filename, table_name='hockey', txt_filename='hockey.txt')
-  # analyze_and_visualize.calculate_ratios(db_filename, table_name='soccer', txt_filename='soccer.txt')
+    # Extra visualization
+    # IN PROGRESS
+    # process_and_visualize.calculate_average_ratio(db_filename)
+    # process_and_visualize.average_visualize()
+    
 
 if __name__ == "__main__":
-  main()
+    main()
+    
+    
