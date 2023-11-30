@@ -185,12 +185,21 @@ def extra_visualization(db_filename):
     cur.execute(f"""SELECT baseball_dates.date, baseball.home_score, baseball.away_score
                     FROM baseball JOIN baseball_dates ON baseball.id = baseball_dates.id""")
 
+    data = []
+
+    for date, home_score, away_score in cur.fetchall():
+        date = date[5:] # Don't need "2022-" at the start
+        score = int(home_score) + int(away_score)
+        data.append((date, score))
+
+    data.sort(key= lambda t : int(t[0].replace('-', '')))
+
     dates = []
     scores = []
 
-    for date, home_score, away_score in cur.fetchall():
+    for date, score in data:
         dates.append(date)
-        scores.append(int(home_score) + int(away_score))
+        scores.append(score)
 
     # Create scatter plot
     
