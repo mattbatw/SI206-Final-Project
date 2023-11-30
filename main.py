@@ -24,9 +24,7 @@ def main():
     process_and_visualize.visualize('soccer')
 
     # Extra visualization
-    # IN PROGRESS
-    # process_and_visualize.calculate_average_ratio(db_filename)
-    # process_and_visualize.average_visualize()
+    process_and_visualize.extra_visualization(db_filename)
     
 
 if __name__ == "__main__":
