@@ -159,7 +159,6 @@ def populate_basketball_table(db_filename):
 
             rows.append((id, home_name, away_name, home_score, away_score))
         
-        
         # Store data
         
         headers = ['id INTEGER PRIMARY KEY', 
