@@ -247,7 +247,7 @@ def populate_soccer_table(db_filename):
 
     response = requests.get(url)
 
-    # Collect data
+    # Parse data
     
     if response.ok:
         rows = []
