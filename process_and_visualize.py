@@ -3,15 +3,12 @@ import sqlite3
 import matplotlib.pyplot as plt 
 
 
-def calculate_ratios(db_filename, sport):
+def calculate_ratios(sport):
     """
     Selects SPECIFIC sport data from the database, calculates the home/away win percentages for each team, and writes the result to a text file.
 
     Parameters
     -----------------------
-    db_filename: string
-        The database file to use.
-
     sport: string
         The sport to calculate percentages for.
 
@@ -23,7 +20,7 @@ def calculate_ratios(db_filename, sport):
     # Connect to database
     
     path = os.path.dirname(os.path.abspath(__file__))
-    conn = sqlite3.connect(path + "/" + db_filename)
+    conn = sqlite3.connect(path + "/sports.db")
     cur = conn.cursor()
 
     # Generate list of unique teams
@@ -160,14 +157,13 @@ def visualize(sport):
     plt.show()
 
 
-def extra_visualization(db_filename):
+def extra_visualization():
     """
     Creates a scatter plot visualization for the home/away points scored on each date for baseball.
 
     Parameters
     -----------------------
-    db_filename: string
-        The database file to use.
+    None
 
     Returns
     -----------------------
@@ -177,7 +173,7 @@ def extra_visualization(db_filename):
     # Connect to database
     
     path = os.path.dirname(os.path.abspath(__file__))
-    conn = sqlite3.connect(path + "/" + db_filename)
+    conn = sqlite3.connect(path + "/sports.db")
     cur = conn.cursor()
 
     # Generate list of dates and scores

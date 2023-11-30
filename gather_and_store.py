@@ -5,15 +5,12 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def store_to_db(db_filename, table_name, headers, rows, limit=5):
+def store_to_db(table_name, headers, rows, limit=5):
     """
     Stores rows into the database. Limited to 5 rows per call.
 
     Parameters
     -----------------------
-    db_filename: string
-        The database file to use.
-
     headers: list
         The headers of the table.
 
@@ -31,7 +28,7 @@ def store_to_db(db_filename, table_name, headers, rows, limit=5):
     # Connect to database
     
     path = os.path.dirname(os.path.abspath(__file__))
-    conn = sqlite3.connect(path + "/" + db_filename)
+    conn = sqlite3.connect(path + "/sports.db")
     cur = conn.cursor()
     
     # Create table
@@ -52,14 +49,13 @@ def store_to_db(db_filename, table_name, headers, rows, limit=5):
     conn.commit()
 
 
-def populate_baseball_table(db_filename):
+def populate_baseball_table():
     """
     Calls Baseball API, extracts useful data, and uses store_to_db() to store the result. 
 
     Parameters
     -----------------------
-    db_filename: string
-        The database file to use.
+    None
 
     Returns
     -----------------------
@@ -110,25 +106,24 @@ def populate_baseball_table(db_filename):
                    'home_score INTEGER', 
                    'away_score INTEGER']
         
-        store_to_db(db_filename, 'baseball', headers, rows)
+        store_to_db('baseball', headers, rows)
 
         headers = ['id INTEGER PRIMARY KEY',
                    'date TEXT']
         
-        store_to_db(db_filename, 'baseball_dates', headers, date_rows)
+        store_to_db('baseball_dates', headers, date_rows)
 
     else:
         exit(response.status_code)
 
 
-def populate_basketball_table(db_filename):
+def populate_basketball_table():
     """
     Calls Basketball API, extracts useful data, and uses store_to_db() to store the result. 
 
     Parameters
     -----------------------
-    db_filename: string
-        The database file to use.
+    None
 
     Returns
     -----------------------
@@ -167,20 +162,19 @@ def populate_basketball_table(db_filename):
                    'home_score INTEGER', 
                    'away_score INTEGER']
         
-        store_to_db(db_filename, 'basketball', headers, rows)
+        store_to_db('basketball', headers, rows)
 
     else:
         exit(response.status_code)
 
 
-def populate_football_table(db_filename):
+def populate_football_table():
     """
     Creates Football BeautifulSoup, extracts useful data, and uses store_to_db() to store the result. 
 
     Parameters
     -----------------------
-    db_filename: string
-        The database file to use.
+    None
 
     Returns
     -----------------------
@@ -221,20 +215,19 @@ def populate_football_table(db_filename):
                    'home_score INTEGER', 
                    'away_score INTEGER']
         
-        store_to_db(db_filename, 'football', headers, rows)
+        store_to_db('football', headers, rows)
 
     else:
         exit(response.status_code)
 
 
-def populate_soccer_table(db_filename):
+def populate_soccer_table():
     """
     Calls Soccer API, extracts useful data, and uses store_to_db() to store the result. 
 
     Parameters
     -----------------------
-    db_filename: string
-        The database file to use.
+    None
 
     Returns
     -----------------------
@@ -269,7 +262,7 @@ def populate_soccer_table(db_filename):
                    'home_score INTEGER', 
                    'away_score INTEGER']
         
-        store_to_db(db_filename, 'soccer', headers, rows)
+        store_to_db('soccer', headers, rows)
 
     else:
         exit(response.status_code)
