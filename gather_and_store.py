@@ -11,11 +11,11 @@ def store_to_db(table_name, headers, rows, limit=5):
 
     Parameters
     -----------------------
-    headers: list
-        The headers of the table.
-
     table_name: string
         The table to add to.
+
+    headers: list
+        The headers of the table.
 
     rows: list
         A list of tuples where every tuple is a row of data.
