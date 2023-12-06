@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 def calculate_ratios(sport):
     """
-    Selects SPECIFIC sport data from the database, calculates the home/away win percentages for each team, and writes the result to a text file.
+    Selects data for a specific sport from the database, calculates the home/away win percentages for each team, and writes the top 5 results to a text file.
 
     Parameters
     -----------------------
@@ -23,31 +23,36 @@ def calculate_ratios(sport):
     conn = sqlite3.connect(path + "/sports.db")
     cur = conn.cursor()
 
-    # Generate list of unique teams
+    # Get names from names table
     
-    cur.execute(f'SELECT home_name FROM {sport}')
-    home_team_col = cur.fetchall()
+    cur.execute(f'SELECT id, name FROM {sport}_team_names')
+    name_dict = {}
+    for id, name in cur.fetchall():
+        name_dict[name] = id
 
-    cur.execute(f'SELECT away_name FROM {sport}')
-    away_team_col = cur.fetchall()
+    # Calculate home/away wins percentages for each team
 
-    team_list = home_team_col + away_team_col
-    team_list = list(set([team[0] for team in team_list])) # Trick to remove duplicates
-
-    # Calculate home win % and away win % for each team
-    # Note: Ignores ties
+    team_win_percentages = []
     
-    for index, team in enumerate(team_list):
-        cur.execute(f'SELECT * FROM {sport} WHERE home_name = "{team}" AND home_score > away_score')
+    for name, id in name_dict.items():
+        cur.execute(f"""SELECT * FROM {sport}_games 
+                        WHERE home_id = "{id}" 
+                        AND home_score > away_score""")
         home_wins = len(cur.fetchall())
-        
-        cur.execute(f'SELECT * FROM {sport} WHERE home_name = "{team}" AND home_score < away_score')
+
+        cur.execute(f"""SELECT * FROM {sport}_games 
+                        WHERE home_id = "{id}" 
+                        AND home_score < away_score""")
         home_losses = len(cur.fetchall())
 
-        cur.execute(f'SELECT * FROM {sport} WHERE away_name = "{team}" AND away_score > home_score')
+        cur.execute(f"""SELECT * FROM {sport}_games 
+                        WHERE away_id = "{id}" 
+                        AND away_score > home_score""")
         away_wins = len(cur.fetchall())
-        
-        cur.execute(f'SELECT * FROM {sport} WHERE away_name = "{team}" AND away_score < home_score')
+
+        cur.execute(f"""SELECT * FROM {sport}_games 
+                        WHERE away_id = "{id}" 
+                        AND away_score < home_score""")
         away_losses = len(cur.fetchall())
 
         home_win_percentage = 0
@@ -57,13 +62,13 @@ def calculate_ratios(sport):
         away_win_percentage = 0
         if (away_wins + away_losses) != 0:
             away_win_percentage = (100 * away_wins) // (away_wins + away_losses)
-
-        team_list[index] = (team, home_win_percentage, away_win_percentage)
+        
+        team_win_percentages.append((name, home_win_percentage, away_win_percentage))
 
     # Find the top 5 home teams and away teams
     
-    top5_home_teams = sorted(team_list, key = lambda t : t[1], reverse=True)[:5]
-    top5_away_teams = sorted(team_list, key = lambda t : t[2], reverse=True)[:5]
+    top5_home_teams = sorted(team_win_percentages, key = lambda t : t[1], reverse=True)[:5]
+    top5_away_teams = sorted(team_win_percentages, key = lambda t : t[2], reverse=True)[:5]
     
     # Write results to a text file
     
@@ -82,7 +87,7 @@ def calculate_ratios(sport):
 
 def visualize(sport):
     """
-    Reads the text file and creates a bar graph visualization for the top 5 home/away win percentages.
+    Reads the text file for a specific sport and creates a bar graph visualization for the top 5 home/away win percentages.
 
     Parameters
     -----------------------
@@ -159,7 +164,7 @@ def visualize(sport):
 
 def extra_visualization():
     """
-    Creates a scatter plot visualization for the home/away points scored on each date for baseball.
+    For baseball only, creates a bar chart visualization for the maximum runs scored in a home game.
 
     Parameters
     -----------------------
@@ -176,36 +181,51 @@ def extra_visualization():
     conn = sqlite3.connect(path + "/sports.db")
     cur = conn.cursor()
 
-    # Generate list of dates and scores
+    # Get max home score for each team
     
-    cur.execute(f"""SELECT baseball_dates.date, baseball.home_score, baseball.away_score
-                    FROM baseball JOIN baseball_dates ON baseball.id = baseball_dates.id""")
-
-    data = []
-
-    for date, home_score, away_score in cur.fetchall():
-        date = date[5:] # Don't need "2022-" at the start
-        score = int(home_score) + int(away_score)
-        data.append((date, score))
-
-    data.sort(key= lambda t : int(t[0].replace('-', '')))
-
-    dates = []
-    scores = []
-
-    for date, score in data:
-        dates.append(date)
-        scores.append(score)
-
-    # Create scatter plot
+    max_home_scores = []
     
-    plt.title('Points Scored in Baseball Games in 2022')
-    plt.xlabel("Date", color='gray')  
-    plt.ylabel("Points", color='gray')  
+    cur.execute('SELECT name FROM baseball_team_names')
+
+    for name_tup in cur.fetchall():
+        name = name_tup[0]
+        cur.execute(f"""
+            SELECT n.name, g.home_score 
+            FROM baseball_games g JOIN baseball_team_names n
+            ON n.id = g.home_id
+            WHERE n.name = "{name}"
+            AND g.home_score = (
+            SELECT MAX(home_score) FROM baseball_games
+            WHERE home_id = n.id)  
+        """)
+
+        res = cur.fetchone()
+        if res is None:
+            continue
+        else:
+            max_home_scores.append(res)
+
+    max_home_scores.sort(key = lambda t : t[1])
+
+    # Create bar chart
+
+    teams  = list([item[0] for item in max_home_scores])
+    scores = list([item[1] for item in max_home_scores])
     
-    plt.scatter(dates, scores, color='#6932a8', label='Game')
+    fig = plt.figure(figsize = (10, 6))
+    plt.bar(teams, scores, color ='red', width = 0.4)
+    
+    for i, score in enumerate(scores):
+        plt.text(i, score + 0.1, str(score), ha='center', va='bottom')
+    
+    plt.xlabel("Team", color='gray')
+    plt.ylabel("Runs", color='gray')
+    plt.title("The Highest Number of Runs Scored in a Home Game in 2022")
+    
     plt.xticks(rotation=45, ha='right')
-
-    plt.legend()
     plt.tight_layout()
     plt.show()
+
+    
+
+    
