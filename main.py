@@ -19,7 +19,7 @@ def main():
     for sport in sports:
         process_and_visualize.visualize(sport)
 
-    # Extra visualization
+    # Extra visualization (with JOIN)
     process_and_visualize.extra_visualization()
     
 
