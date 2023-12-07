@@ -167,8 +167,8 @@ def visualize(sport):
 
 def extra_visualization():
     """
-    For baseball only, creates a bar chart visualization 
-    for the maximum runs scored in a home game.
+    For baseball only, selects data from the database and 
+    creates a bar chart visualization for the maximum runs scored in a home game.
 
     Parameters
     -----------------------
