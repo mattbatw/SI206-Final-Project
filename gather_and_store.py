@@ -17,7 +17,8 @@ name_headers = ['id INTEGER PRIMARY KEY',
 
 def store_to_db(table_name, headers, rows, limit=3):
     """
-    Stores rows into the database. Limited to 3 rows per call by default.
+    Stores rows into the database. 
+    Limited to 3 rows per call by default.
 
     Parameters
     -----------------------
@@ -59,7 +60,8 @@ def store_to_db(table_name, headers, rows, limit=3):
 
 def populate_baseball_tables():
     """
-    Calls Baseball API, extracts useful data, and uses store_to_db() to store the result. 
+    Calls Baseball API and extracts useful data. 
+    Uses store_to_db() to store the result. 
 
     Parameters
     -----------------------
@@ -81,7 +83,7 @@ def populate_baseball_tables():
     }
     response = requests.get(url, params)
 
-    # Parse data
+    # Extract data
      
     game_rows = []
     name_dict = {}
@@ -122,7 +124,8 @@ def populate_baseball_tables():
 
 def populate_basketball_tables():
     """
-    Calls Basketball API, extracts useful data, and uses store_to_db() to store the result. 
+    Calls Basketball API and extracts useful data. 
+    Uses store_to_db() to store the result.  
 
     Parameters
     -----------------------
@@ -142,7 +145,7 @@ def populate_basketball_tables():
     }
     response = requests.get(url, params)
 
-    # Parse data
+    # Extract data
     
     game_rows = []
     name_dict = {}
@@ -176,7 +179,8 @@ def populate_basketball_tables():
 
 def populate_football_tables():
     """
-    Creates Football BeautifulSoup, extracts useful data, and uses store_to_db() to store the result. 
+    Calls Football BeautifulSoup and extracts useful data. 
+    Uses store_to_db() to store the result. 
 
     Parameters
     -----------------------
@@ -193,7 +197,7 @@ def populate_football_tables():
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Parse data
+    # Extract data
     
     game_rows = []
     name_dict = {}
@@ -233,7 +237,8 @@ def populate_football_tables():
 
 def populate_soccer_tables():
     """
-    Calls Soccer API, extracts useful data, and uses store_to_db() to store the result. 
+    Calls Soccer API and extracts useful data. 
+    Uses store_to_db() to store the result. 
 
     Parameters
     -----------------------
@@ -249,7 +254,7 @@ def populate_soccer_tables():
     url = 'https://api.openligadb.de/getmatchdata/bl1/2022'
     response = requests.get(url)
 
-    # Parse data
+    # Extract data
     
     game_rows = []
     name_dict = {}

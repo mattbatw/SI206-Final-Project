@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 
 def calculate_ratios(sport):
     """
-    Selects data for a specific sport from the database, calculates the home/away win percentages for each team, and writes the top 5 results to a text file.
+    Selects data for a specific sport from the database, 
+    calculates the home/away win percentages for each team, 
+    and writes the top 5 results to a text file.
 
     Parameters
     -----------------------
@@ -87,7 +89,8 @@ def calculate_ratios(sport):
 
 def visualize(sport):
     """
-    Reads the text file for a specific sport and creates a bar graph visualization for the top 5 home/away win percentages.
+    Reads the text file for a specific sport, and creates a bar graph visualization 
+    for the top 5 home/away win percentages.
 
     Parameters
     -----------------------
@@ -164,7 +167,8 @@ def visualize(sport):
 
 def extra_visualization():
     """
-    For baseball only, creates a bar chart visualization for the maximum runs scored in a home game.
+    For baseball only, creates a bar chart visualization 
+    for the maximum runs scored in a home game.
 
     Parameters
     -----------------------

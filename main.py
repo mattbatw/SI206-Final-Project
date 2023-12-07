@@ -3,6 +3,20 @@ import process_and_visualize
     
 
 def main():
+    """
+    Top level program function. 
+    Executes Part 2 using gather_and_store, then Parts 3 and 4 using calculate_and_visualize. 
+    Also creates an extra visualization. 
+
+    Parameters
+    -----------------------
+    None
+
+    Returns
+    -----------------------
+    None
+    """
+
     sports = ['baseball', 'basketball', 'football', 'soccer']
         
     # Part 2 - Gather data, store to database
