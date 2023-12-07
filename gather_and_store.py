@@ -61,7 +61,7 @@ def store_to_db(table_name, headers, rows, limit=3):
 def populate_baseball_tables():
     """
     Calls Baseball API and extracts useful data. 
-    Uses store_to_db() to store the result. 
+    Uses store_to_db() to store to the games table and names table.
 
     Parameters
     -----------------------
@@ -125,7 +125,7 @@ def populate_baseball_tables():
 def populate_basketball_tables():
     """
     Calls Basketball API and extracts useful data. 
-    Uses store_to_db() to store the result.  
+    Uses store_to_db() to store to the games table and names table.
 
     Parameters
     -----------------------
@@ -180,7 +180,7 @@ def populate_basketball_tables():
 def populate_football_tables():
     """
     Calls Football BeautifulSoup and extracts useful data. 
-    Uses store_to_db() to store the result. 
+    Uses store_to_db() to store to the games table and names table.
 
     Parameters
     -----------------------
@@ -238,7 +238,7 @@ def populate_football_tables():
 def populate_soccer_tables():
     """
     Calls Soccer API and extracts useful data. 
-    Uses store_to_db() to store the result. 
+    Uses store_to_db() to store to the games table and names table.
 
     Parameters
     -----------------------
